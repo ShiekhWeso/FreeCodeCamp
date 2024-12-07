@@ -1,37 +1,38 @@
-text = str(input())
-custom_key = "anything"
+# بسم الله الرحمن الرحيم
 
-def vigenere(message, key, direction=1):
-    key_index = 0
-    alphabet = 'abcdefghijklmnopqrstuvwxyz'
-    final_message = ''
+نص = str(input("ادخل النص اخى المسلم:🙏🙏🙏"))
+مفتاح_معدل = "جهنم"
 
-    for char in message.lower():
-        
-        # Append any non-letter character to the message.        
-        if not char.isalpha(): # if char == " ":
-            final_message += char
+def خل(رسالة, مفتاح, اتجاه=1):
+    مؤشر_المفتاح = 0
+    الابجدية = 'ابتثجحخدذرزسشصضطظعغفقكلمنه'
+    الرسالة_النهائية = ''
+
+    for حرف in رسالة.lower():
+        # إضافة أي حرف غير حرفي إلى الرسالة.
+        if not حرف.isalpha(): # if حرف  == " ":
+            الرسالة_النهائية += حرف
         else:
-            # Find the right character to encode/decode
-            key_char = key[key_index % len(key)]
-            key_index += 1
-            
-            # Define the offset and the encrypted/decrypted letter
-            offset = alphabet.index(key_char)
-            index = alphabet.find(char) 
-            new_index = (index + offset*direction) % len(alphabet)
-            final_message += alphabet[new_index]
-            
-    return final_message
+            # ابحث عن الحرف الصحيح للترميز/فك التشفير
+            حرف_مفتاح = مفتاح[مؤشر_المفتاح % len(مفتاح)]
+            مؤشر_المفتاح += 1
 
-def encrypt(message, key):
-    return vigenere(message, key)
-    #pass
-    
-def decrypt(message, key):
-    return vigenere(message, key, -1)
+            # تحديد الإزاحة والحرف المشفر/المفكوك التشفير
+            ازاحة = الابجدية.index(حرف_مفتاح)
+            فِهرِس = الابجدية.find(حرف)
+            فهرس_جديد = (فِهرِس + ازاحة * اتجاه) % len(الابجدية)
+            الرسالة_النهائية += الابجدية[فهرس_جديد]
 
-print(f"\nEncrypted text: {text}")
-print(f"Key: {custom_key}")
-decryption = decrypt(text, custom_key)
-print(f"\nDecrypted text: {decryption}\n")
+    return الرسالة_النهائية
+
+def شفر(رسالة, مفتاح):
+    return خل(رسالة, مفتاح)
+    # مرر الكرة يا صاح
+
+def فك_تشفير(رسالة, مفتاح):
+    return خل(رسالة, مفتاح, -1)
+
+print(f"النص المشفر اخي المسلم: {نص}")
+print(f"المفتاح: {مفتاح_معدل}")
+فك_التشفير = فك_تشفير(نص, مفتاح_معدل)
+print(f"النص المفكوك: {فك_التشفير}\n")
