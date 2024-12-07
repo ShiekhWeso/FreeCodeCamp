@@ -1,2 +1,2 @@
-# FreeCodeCamp
- Free code camp python course
+# معسكر البرمجة المجاني
+دورة مجانية في معسكر البرمجة باستخدام بايثون
