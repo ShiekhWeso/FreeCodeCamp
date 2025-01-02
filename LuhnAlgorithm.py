@@ -1,37 +1,37 @@
-#1. From the right to left, double the value of every second digit; if the product is greater than 9, sum the digits of the products.
-#2. Take the sum of all the digits.
-#3. If the sum of all the digits is a multiple of 10, then the number is valid; else it is not valid.
+#1. من اليمين إلى اليسار، ضاعف قيمة كل رقم ثانٍ؛ إذا كان الناتج أكبر من 9، اجمع أرقام الناتج.
+#2. احسب مجموع كل الأرقام.
+#3. إذا كان مجموع كل الأرقام مضاعفًا للرقم 10، فإن الرقم صحيح؛ وإلا فهو غير صحيح.
 
-def verify_card_number(card_number):
-    sum_of_odd_digits = 0
-    card_number_reversed = card_number[::-1]
-    # print(card_number_reversed)
-    odd_digits = card_number_reversed[::2]
-    
-    for digit in odd_digits:
-        (sum_of_odd_digits) += int(digit)
-        
-    sum_of_even_digits = 0
-    even_digits = card_number_reversed[1::2]
-    
-    for digit in even_digits:
-        number = int(digit) *2
-        if number >= 10:
-            number = number // 10 + number % 10
-        sum_of_even_digits += number
-    total = sum_of_even_digits + sum_of_odd_digits
-    print(total)
-    
-    return 0 == total % 10
-    
-def main():
-    card_number = input(str("plz enter and your numbers"))
-    card_translation = str.maketrans({'-': '', ' ': ''})
-    translated_card_number = card_number.translate(card_translation)
+انطر = lambda نطرات: print(نطرات)
+def تاكد_بطاقة_رقم(بطاقة_رقم):
+    مجموع_غريب_ارقام = 0
+    بطاقة_رقم_معكوس = بطاقة_رقم[::-1]
+    # اطبع(بطاقة_رقم_معكوس)
+    غريبة_ارقام = بطاقة_رقم_معكوس[::2]
 
-    if verify_card_number(translated_card_number):
-        print("VALID!")
+    for رقم in غريبة_ارقام:
+        (مجموع_غريب_ارقام) += int(رقم)
+
+    مجموع_حتي_ارقام = 0
+    حتي_ارقام = بطاقة_رقم_معكوس[1::2]
+
+    for رقم in حتي_ارقام:
+        عدد = int(رقم) *2
+        if عدد >= 10:
+            عدد = عدد // 10 + عدد % 10
+        مجموع_حتي_ارقام += عدد
+    توتال = مجموع_حتي_ارقام + مجموع_غريب_ارقام
+    انطر(توتال)
+
+    return 0 == توتال % 10
+
+رئيسي = "__main__"
+if __name__ == رئيسي:
+    بطاقة_رقم = input(str("من فضلك أدخل و أرقامك: "))
+    ترجمة_بطاقة = str.maketrans({'-': '', ' ': ''}) # ترانس؟؟؟؟ شذوذ والعياذ بالله
+    مترجم_رقم_بطاقة = بطاقة_رقم.translate(ترجمة_بطاقة)
+
+    if تاكد_بطاقة_رقم(مترجم_رقم_بطاقة):
+        انطر("توب التوب!")
     else:
-        print("INVALID!")
-
-main()
+        انطر("زوجتي عقيمة واخاسلوك اقاربى بعدي:\nامنحنى من جانبك وريثا😫✊")
