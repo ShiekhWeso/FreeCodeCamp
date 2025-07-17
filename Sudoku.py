@@ -25,6 +25,33 @@ class Board:
                     return False
         return True
     
+    def is_valid(self, empty, num):
+        row, col = empty
+        valid_in_row = self.valid_in_row(row, num)
+        valid_in_col = self.valid_in_col(col, num)
+        valid_in_square = self.valid_in_square(row, col ,num)
+        
+    def solver(self):
+        if (next_empty := self.find_empty_cell()) is None:
+            return True
+        for guess in range(1, 10):
+            if self.is_valid(next_empty, guess):
+                row, col = next_empty
+                self.board[row][col]
+                if self.solver():
+                    return True
+                self.board[row][col] = 0
+        return False
+
+def solve_sudoku(board):
+    gameboard = Board(board)
+    print(f"Puzzle to solve:\n{gameboard}")
+    if gameboard.solver() == True:
+        print( f"Solved puzzle:\n{gameboard}")
+    else:
+        print("The provided puzzle is unsolvable.")
+    return gameboard
+    
 puzzle = [
   [0, 0, 2, 0, 0, 8, 0, 0, 0],
   [0, 0, 0, 0, 0, 3, 7, 6, 2],
@@ -38,4 +65,4 @@ puzzle = [
 ]
     
 gameboard = Board(puzzle)
-print(gameboard.valid_in_square(1,0,3))
+print(gameboard)
