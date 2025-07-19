@@ -4,6 +4,9 @@ class TreeNode:
         self.left = None
         self.right = None
         
+    def __str__(self):
+        return str(self.key)
+        
 class BinarySearchTree:
     def __init__(self):
         self.root = None
@@ -29,4 +32,11 @@ class BinarySearchTree:
     
     def search(self, key):
         return self._search(self.root, key)
-        
+    
+bst = BinarySearchTree()
+nodes = [50, 30, 20, 40, 70, 60, 80]
+
+for node in nodes:
+    bst.insert(node)
+    
+print('Search for 80:', bst.search(80))
