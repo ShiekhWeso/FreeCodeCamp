@@ -16,8 +16,17 @@ class R2Vector:
         args = ", ".join(arg_list)
         return f"{self.__class__.__name__}({args})"
     
-    def __getattribute__(self, attr):
-        return "calling __getattribute__"
+    def __add__(self, other):
+        if type(self) != type(other):
+            return NotImplemented
+        kwargs = {i : getattr(self, i) + getattr(other, i) for i in vars(self)}
+        return self.__class__(**kwargs) 
+    
+    def __sub__(self, other):
+        if type(self) != type(other):
+            return NotImplemented
+        kwargs = {i : getattr(self, i) - getattr(other, i) for i in vars(self)}
+        return self.__class__(**kwargs)
         
 class R3Vector(R2Vector):
     def __init__(self, *, x, y, z):
@@ -26,9 +35,9 @@ class R3Vector(R2Vector):
     
 v1 = R2Vector(x=2, y=3)
 v2 = R3Vector(x=2, y=2, z=3)
-print(v1.norm())
-print(v2.norm())
-print(f"v1 = {v1}', f'\nrepr = {repr(v1)}")
-print(f"v2 = {v2}', f'\nrepr = {repr(v2)}")
-print(v1.x)
-print(getattr(v1, 'x'))
+v3 = R2Vector(x=0.5, y=1.25)
+print(f"v1 = {v1}\nv2 = {v2}\nv3 = {v3}")
+v4 = v1 + v3
+print(f"v4 = v1 + v3 = {v4}")
+v5 = v1 - v3
+print(f"v5 = v1 - v3 = {v5}")
