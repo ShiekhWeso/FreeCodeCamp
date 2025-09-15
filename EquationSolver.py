@@ -29,7 +29,7 @@ class Equation(ABC):
                 terms.append(f"{coefficient:+}x")
         equation_string = " ".join(terms) + " = 0"
         
-        return equation_string.strip("+ ")
+        return equation_string.strip("+")
     
     @abstractmethod
     def solve(self):
@@ -41,12 +41,21 @@ class Equation(ABC):
     
 class LinearEquation(Equation):
     degree = 1
+    
     def solve(self):
-        pass
+        a, b = self.coefficients.values()
+        x = -b / a
+        return x
     
     def analyze(self):
-        pass
+        slope, intercept = self.coefficients.values()
+        return f"Slope: {slope}, Intercept: {intercept}"
     
 lin_eq = LinearEquation(2, 3)
 # LinearEquation(4, 5) ---> 4x + 5 = 0
 print(lin_eq)
+print(lin_eq.solve())
+print(lin_eq.analyze())
+
+# Adding main function
+# making the code take input from the user
