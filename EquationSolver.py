@@ -4,6 +4,7 @@ import math
 
 class Equation(ABC):
     degree: int
+    type: str  
     
     def __init__(self, *args):
         if len(args) != self.degree + 1:
@@ -19,6 +20,8 @@ class Equation(ABC):
     def __init_subclass__(cls):
         if not hasattr(cls, "degree"):
             raise AttributeError(f"Cannot create '{cls.__name__}' class: missing required attribute 'degree'")
+        if not hasattr(cls, "type"):
+            raise AttributeError(f"Cannot create '{cls.__name__}' class: missing required attribute 'type'")
     
     def __str__(self):
         terms = []
@@ -45,6 +48,7 @@ class Equation(ABC):
     
 class LinearEquation(Equation):
     degree = 1
+    type = "Linear Equation"
 
     def solve(self):
         a, b = self.coefficients.values()
@@ -53,10 +57,11 @@ class LinearEquation(Equation):
 
     def analyze(self):
         slope, intercept = self.coefficients.values()
-        return f"Slope: {slope}, Intercept: {intercept}"
+        return {"slope": slope, "intercept": intercept}
 
 class QuadraticEquation(Equation):
     degree = 2
+    type = "Quadratic Equation"
     
     def __init__(self, *args):
         super().__init__(*args)
@@ -80,9 +85,49 @@ class QuadraticEquation(Equation):
         x = -b / (2 * a)
         y = a * x**2 + b * x + c
         
-        return {"x": x, "y": y}
+        if a > 0:
+            concavity = "upward"
+            min_max = "min"
+        else:
+            concavity = "downward"
+            min_max = "max"
+        
+        return {"x": x, "y": y, "concavity": concavity, "min_max": min_max}
+    
+def solver(equation):
+    if not isinstance(equation, Equation):
+        raise TypeError("Argument must be an instance of 'Equation' or its subclasses")
+    
+    output_string = f'\n{equation.type:-^24}'
+    output_string += f'\n\n{equation!s:^24}\n\n'
+    output_string += f'{"Solutions":-^24}\n\n'
 
-lin_eq = LinearEquation(1, 3)
+    results = equation.solve()
+    match results:
+        case []:
+            result_list = ["No real roots"]
+        case [x]:
+            result_list = [f"x = {x:+.3f}"]  # <-- .3f for 3 decimal digits
+        case [x1, x2]:
+            result_list = [f"x1 = {x1:+.3f}", f"x2 = {x2:+.3f}"]  # <-- .3f for 3 decimal digits        
+    for result in result_list:
+        output_string += f"{result:^24}\n"
+        
+    output_string += f'\n{"Details":-^24}\n\n'
+    
+    details = equation.analyze()
+    match details:
+        case {'slope': slope, 'intercept': intercept}:
+            details_list = [f'slope = {slope:>16.3f}', f'y-intercept = {intercept:>10.3f}']
+        case {'x': x, 'y': y, 'min_max': min_max, 'concavity': concavity}:
+            coord = f'({x:.3f}, {y:.3f})'
+            details_list = [f'concavity = {concavity:>12}', f'{min_max} = {coord:>18}']
+    for detail in details_list:
+        output_string += f'{detail}\n'    
+
+    return output_string
+
+lin_eq = LinearEquation(2, 3)
 # LinearEquation(4, 5) ---> 4x + 5 = 0
 print(lin_eq)
 print(lin_eq.solve())
@@ -91,6 +136,8 @@ print(lin_eq.analyze())
 quadr_eq = QuadraticEquation(1, 2, 1)
 print(quadr_eq)
 print(quadr_eq.solve())
+
+print(solver(quadr_eq))
 
 # Adding main function
 # making the code take input from the user
