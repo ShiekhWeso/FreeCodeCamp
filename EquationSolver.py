@@ -25,18 +25,38 @@ class Equation(ABC):
     
     def __str__(self):
         terms = []
-        for n, coefficient in self.coefficients.items():
+        for i, (n, coefficient) in enumerate(self.coefficients.items()):
             if not coefficient:
                 continue
+
+            # Handle coefficient display
+            if coefficient == 1 and n != 0:
+                formatted = ""
+            elif coefficient == -1 and n != 0:
+                formatted = "-"
+            elif coefficient.is_integer():
+                formatted = f"{int(coefficient)}"
+            else:
+                formatted = f"{coefficient:.1f}"
+
+            # Build term
             if n == 0:
-                terms.append(f"{coefficient:+}")
+                term = f"{formatted}"
             elif n == 1:
-                terms.append(f"{coefficient:+}x")
-            elif n > 1:
-                terms.append(f"{coefficient:+}x^{n}")        
+                term = f"{formatted}x"
+            else:
+                term = f"{formatted}x^{n}"
+
+            # Add sign for non-first terms
+            if i == 0:
+                terms.append(term if coefficient > 0 else f"-{term.lstrip('-')}")
+            else:
+                sign = "+" if coefficient > 0 else "-"
+                terms.append(f"{sign}{term.lstrip('-')}")
+
         equation_string = " ".join(terms) + " = 0"
-        
-        return re.sub(r'(?<!\d)1(?=x)', '', equation_string.strip("+"))
+        return equation_string
+
     
     @abstractmethod
     def solve(self):
@@ -127,17 +147,41 @@ def solver(equation):
 
     return output_string
 
-lin_eq = LinearEquation(2, 3)
-# LinearEquation(4, 5) ---> 4x + 5 = 0
-print(lin_eq)
-print(lin_eq.solve())
-print(lin_eq.analyze())
-
-quadr_eq = QuadraticEquation(1, 2, 1)
-print(quadr_eq)
-print(quadr_eq.solve())
-
-print(solver(quadr_eq))
-
-# Adding main function
-# making the code take input from the user
+def main():
+    print("Welcome to the Equation Solver!")
+    while True:
+        choice = input("Choose the type of equation to solve (1 for Linear, 2 for Quadratic, (E) for exit): ")
+        if choice == '1':
+            try:
+                a = float(input("Enter coefficient a (for ax + b = 0): "))
+                b = float(input("Enter coefficient b: "))
+                equation = LinearEquation(a, b)
+                print(solver(equation))
+            except ValueError as ve:
+                print(f"Input Error: {ve}")
+                continue
+            except TypeError as te:
+                print(f"Type Error: {te}")
+                continue     
+        elif choice == '2':
+            try:
+                a = float(input("Enter coefficient a (for ax^2 + bx + c = 0): "))
+                b = float(input("Enter coefficient b: "))
+                c = float(input("Enter coefficient c: "))
+                equation = QuadraticEquation(a, b, c)
+                print(solver(equation))
+            except ValueError as ve:
+                print(f"Input Error: {ve}")
+                continue
+            except TypeError as te:
+                print(f"Type Error: {te}")
+                continue  
+        elif choice.upper() == 'E':
+            print("Exiting the Equation Solver. Goodbye!")
+            break   
+        else:
+            print("Invalid choice. Please select 1 or 2.")
+            continue 
+    
+if __name__ == "__main__":
+    main()
