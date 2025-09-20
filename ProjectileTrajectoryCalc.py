@@ -72,7 +72,78 @@ class Projectile:
     def __repr__(self):
         return f'Projectile({self.speed}, {self.height}, {self.angle})'
  
-ball = Projectile(10, 3, 45)
-print(ball)
-coordinates = ball.calculate_all_coordinates()
-print(coordinates)
+class Graph:
+    __slots__ = ('__coordinates')
+        
+    def __init__(self, coordinates):
+        self.__coordinates = coordinates
+            
+    def __repr__(self):
+        return f'Graph({self.__coordinates})'
+    
+    def create_coordinates_table(self):
+        table = "\n  x      y\n"
+        for x, y in self.__coordinates:
+            table += f"{x:>3}{y:>7.2f}\n"
+            
+        return table
+        
+    def create_trajectory(self):
+        rounded_coords = [(round(x), round(y)) for x, y in self.__coordinates]
+        x_max = max(x for x, y in rounded_coords)
+        y_max = max(y for x, y in rounded_coords)
+        
+        matrix_list = [[" " for _ in range(x_max + 1)] for _ in range(y_max + 1)]
+        
+        for (x, y) in rounded_coords:
+            matrix_list[-y-1][x] = PROJECTILE
+            
+        matrix = ["".join(line) for line in matrix_list]
+        
+        matrix_axes = [y_axis_tick + row for row in matrix]
+        matrix_axes.append(" " + x_axis_tick * (len(matrix[0])))
+        
+        graph = "\n" + "\n".join(matrix_axes) + "\n"
+                    
+        return graph
+    
+def main():
+    print("This is a module for calculating projectile trajectories.")
+    while True:
+        try:
+            while True:
+                choice = str(input("1. Calculate trajectory\n2. Exit\nChoose an option (1-2): "))
+                if choice == '2':
+                    print("Exiting the program.")
+                    return
+                
+                elif choice == '1':
+                    speed = float(input("Enter the initial speed (m/s): "))
+                    if speed <= 0:
+                        print("Speed must be a positive number.")
+                        continue
+                    height = float(input("Enter the initial height (m): "))
+                    if height < 0:
+                        print("Height cannot be negative.")
+                        continue
+                    angle = float(input("Enter the launch angle (degrees): "))
+                    if angle < 0 or angle > 90:
+                        print("Angle must be between 0 and 90 degrees.")
+                        continue
+                    
+                    projectile = Projectile(speed, height, angle)
+                    print(projectile)
+                    coordinates = projectile.calculate_all_coordinates()
+                    graph = Graph(coordinates)
+                    print(graph.create_coordinates_table())
+                    print(graph.create_trajectory())
+                    
+                else:
+                    print("Invalid choice. Please select 1 or 2.")
+                    continue
+            
+        except ValueError:
+            print("Invalid input. Please enter numeric values.")    
+            
+if __name__ == "__main__":
+    main()
